@@ -41,6 +41,7 @@ public class CreateServlet extends HttpServlet {
 
             em.persist(m);
             em.getTransaction().commit();
+            request.getSession().setAttribute("flush", "登録が完了しました。");
             em.close();
 
             response.sendRedirect(request.getContextPath() + "/index");
@@ -72,6 +73,14 @@ public class CreateServlet extends HttpServlet {
 //
 //   そして、データベースへの保存が完了したら、indexページへリダイレクト（遷移）させるように
 //   しています。
+
+//   /create、/update、/destroy の各サーブレットで、データベースに対する処理が完了したとき
+//   にフラッシュメッセージをセットします。しかし、そこから /index へリダイレクトし、さらに
+//   index.jsp を呼び出すという複数の遷移が発生するため、リクエストスコープにフラッシュメッセージ
+//   をセットすると途中で削除されてしまいます。
+//
+//   そこで、フラッシュメッセージをセッションスコープに保存し、index.jsp を呼び出したときに
+//   セッションスコープから取り出して表示するようにします。
 
         }
     }
